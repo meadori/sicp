@@ -172,3 +172,103 @@
 ;; triggered.
 ;;
 ;; This is a good example of why special forms are needed.
+
+
+;; Exericse 1.7
+
+;; `sqrt` fails for:
+;;
+;;   (sqrt 1000000000000000)
+;;
+;; The execution trace of guesses looks like:
+;;
+;;   1.0
+;;   500000000000000.5
+;;   250000000000001.25
+;;   125000000000002.62
+;;   62500000000005.31
+;;   31250000000010.656
+;;   15625000000021.328
+;;   7812500000042.664
+;;   3906250000085.332
+;;   1953125000170.666
+;;   976562500341.333
+;;   488281250682.6665
+;;   244140626365.33325
+;;   122070315230.66661
+;;   61035161711.33321
+;;   30517589047.665874
+;;   15258810907.827074
+;;   7629438221.866625
+;;   3814784646.558015
+;;   1907523392.2766902
+;;   954023816.1217878
+;;   477536003.99178225
+;;   239815043.46673402
+;;   121992461.83041875
+;;   65094844.81723103
+;;   40228522.216194235
+;;   32543253.585447475
+;;   31635794.320938785
+;;   31622779.27999515
+;;   31622776.601683907
+;;   31622776.601683795
+;;   31622776.601683795
+;;   31622776.601683795
+;;   ...
+;;
+;; As seen, it bottoms out at 31622776.601683795.
+;; `good-enough` returns false for this number because
+;; its value squared minus the radican is *not* less
+;; than 0.001:
+;;
+;;   > (- (square 31622776.601683795) 1000000000000000)
+;;   0.125
+;;
+;; Then the guess is "improved":
+;;
+;;   > (average 31622776.601683795 (/ 1000000000000000 31622776.601683795))
+;;   31622776.601683795
+;;
+;; However, it is "improved" to the exact same number.  Thus the
+;; process goes on forever.
+;;
+;; Now consider taking the square root of a very small number:
+;;
+;;   > (sqrt 1.8e-10)
+;;   0.031250001918124985
+;;
+;; It does terminate, but the result is away from the actual result of
+;; 1.3416407864998738e-05:
+;;
+;;   > (- 0.031250001918124985 1.3416407864998738e-05)
+;;   0.031236585510259988
+
+(define (sqrt-iter prev-guess guess x)
+  (if (good-enough? prev-guess guess)
+      guess
+      (sqrt-iter guess (improve guess x)
+                 x)))
+
+(define (improve guess x)
+  (average guess (/ x guess)))
+
+(define (average x y)
+  (/ (+ x y) 2))
+
+(define (good-enough? prev-guess guess)
+  (< (abs (- prev-guess guess)) 0.000001))
+
+(define (sqrt x)
+  (sqrt-iter 0.0 1.0 x))
+
+;; The above method where successive guesses are compared
+;; gives much better results:
+;;
+;;   > (sqrt 1000000000000000)
+;;   31622776.601683795
+;;   > (sqrt 1.8e-10)
+;;   1.3440077688603855e-05
+;;
+;; It actually terminates for the large case and gives a much
+;; closer result for the smaller number.
