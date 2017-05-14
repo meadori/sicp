@@ -272,3 +272,26 @@
 ;;
 ;; It actually terminates for the large case and gives a much
 ;; closer result for the smaller number.
+
+
+;; Exericse 1.8
+
+(define (cube-root x)
+  (define (cube-root-iter prev-guess guess x)
+    (if (good-enough? prev-guess guess)
+        guess
+        (cube-root-iter guess (improve guess x)
+                        x)))
+  (define (improve guess x)
+    (/ (+ (/ x (square guess))
+          (* 2 guess))
+       3))
+  (define (good-enough? prev-guess guess)
+    (< (abs (- prev-guess guess)) 0.000001))
+  (cube-root-iter 0 1.0 x))
+;; > (cube-root 9)
+;; 2.080083823051904
+;; > (cube-root 27)
+;; 3.0000000000000977
+;; > (cube-root 10000000000000)
+;; 21544.346900318837
