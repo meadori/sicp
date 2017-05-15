@@ -370,3 +370,61 @@
 
 (define (k n) (* 5 n n))
 ;; k(n) = 5 * n ^ 2
+
+
+;; Exercise 1.11
+
+(define (f n)
+  (if (< n 3)
+      n
+      (+ (f (- n 1))
+         (* 2 (f (- n 2)))
+         (* 3 (f (- n 3))))))
+
+(write (f 2))
+(newline)
+;; 2
+
+(write (f 3))
+(newline)
+;; 4
+
+(write (f 11))
+(newline)
+;; 4489
+
+(define (f n)
+  (define (f-iter a b c n)
+    (if (= n 0)
+        c
+        (f-iter (+ a (* 2 b) (* 3 c)) a b (- n 1))))
+  (f-iter 2 1 0 n))
+
+(write (f 2))
+(newline)
+;; 2
+
+(write (f 3))
+(newline)
+;; 4
+
+(write (f 11))
+(newline)
+;; 4489
+
+
+;; Exercise 1.12
+
+(define (pascal row col)
+  (cond ((= col 1) 1)
+        ((= col row) 1)
+        (else (+ (pascal (- row 1) (- col 1))
+                 (pascal (- row 1) col)))))
+
+(write (pascal 3 2))
+(newline)
+;; 2
+
+(write (pascal 5 3))
+(newline)
+;; 6
