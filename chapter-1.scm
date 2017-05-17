@@ -428,3 +428,35 @@
 (write (pascal 5 3))
 (newline)
 ;; 6
+
+
+;; Exercise 1.13
+
+;; Given:
+;;
+;;   fib(n) = fib(n - 1) + fib(n - 2)
+;;   phi = (1 + sqrt(5)) / 2
+;;   psi = (1 - sqrt(5)) / 2
+;;
+;; Also note that:
+;;
+;;   phi^n = phi^(n-1) + phi^(n-2)
+;;   psi^n = psi^(n-1) + psi^(n-2)
+;;
+;; Then, by induction on `n` the following can be proved:
+;;
+;;   fib(n) = (phi^n - psi^n) / sqrt(5)
+;;
+;; Base cases:
+;;
+;;   fib(0) = 0 = (phi^0 - psi^0) / sqrt(5) = 0
+;;   fib(1) = 1 = (phi^1 - psi^1) / sqrt(5)
+;;          = ((1 + sqrt(5))/2 - (1 - sqrt(5))/2) / sqrt(5)
+;;          = ((2 * sqrt(5)) / 2) / sqrt(5) = 1
+;;
+;; Induction step:
+;;
+;;   fib(n) = fib(n - 1) + fib(n - 2)
+;;          = ((phi^(n-1) - psi^(n-1)) + (phi^(n-2) - psi^(n-2))) / sqrt(5)
+;;          = ((phi^(n-1) + phi^(n-2)) - (psi^(n-1) + psi^(n-2))) / sqrt(5)
+;;          = (phi^n - psi^n) / sqrt(5)
