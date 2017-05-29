@@ -608,3 +608,20 @@
 
 (write (* 5 5))
 (newline)
+
+
+;; Exercise 1.18
+
+(define (* a b)
+  (*-fast-iter a b 0))
+
+(define (*-fast-iter a b c)
+  (cond ((= b 0) c)
+        ((even? b) (*-fast-iter (double a) (half b) c))
+        (else (*-fast-iter a (- b 1) (+ a c)))))
+
+(write (* 13 11))
+(newline)
+
+(write (* 5 5))
+(newline)
