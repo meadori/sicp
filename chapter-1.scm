@@ -596,12 +596,12 @@
   (half-help a a))
 
 (define (* a b)
-  (fast-* a b))
+  (*-fast a b))
 
-(define (fast-* a b)
+(define (*-fast a b)
   (cond ((= b 1) a)
-        ((even? b) (double (fast-* a (half b))))
-        (else (+ a (fast-* a (- b 1))))))
+        ((even? b) (double (*-fast a (half b))))
+        (else (+ a (*-fast a (- b 1))))))
 
 (write (* 13 11))
 (newline)
