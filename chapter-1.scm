@@ -582,3 +582,29 @@
 
 (write (expt 10 6))
 (newline)
+
+
+;; Exercise 1.17
+
+(define (double a) (+ a a))
+
+(define (half a)
+  (define (half-help a b)
+    (if (= (+ b b) a)
+        b
+        (half-help a (- b 1))))
+  (half-help a a))
+
+(define (* a b)
+  (fast-* a b))
+
+(define (fast-* a b)
+  (cond ((= b 1) a)
+        ((even? b) (double (fast-* a (half b))))
+        (else (+ a (fast-* a (- b 1))))))
+
+(write (* 13 11))
+(newline)
+
+(write (* 5 5))
+(newline)
