@@ -595,7 +595,7 @@
         (half-help a (- b 1))))
   (half-help a a))
 
-(define (* a b)
+(define (mult a b)
   (*-fast a b))
 
 (define (*-fast a b)
@@ -603,16 +603,16 @@
         ((even? b) (double (*-fast a (half b))))
         (else (+ a (*-fast a (- b 1))))))
 
-(write (* 13 11))
+(write (mult 13 11))
 (newline)
 
-(write (* 5 5))
+(write (mult 5 5))
 (newline)
 
 
 ;; Exercise 1.18
 
-(define (* a b)
+(define (mult a b)
   (*-fast-iter a b 0))
 
 (define (*-fast-iter a b c)
@@ -620,8 +620,40 @@
         ((even? b) (*-fast-iter (double a) (half b) c))
         (else (*-fast-iter a (- b 1) (+ a c)))))
 
-(write (* 13 11))
+(write (mult 13 11))
 (newline)
 
-(write (* 5 5))
+(write (mult 5 5))
+(newline)
+
+
+;; Excercise 1.19
+
+(define (fib n)
+  (fib-iter 1 0 0 1 n))
+
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+        ((even? count)
+         (fib-iter a
+                   b
+                   (+ (square p) (square q))
+                   (+ (* 2 p q) (square q))
+                   (/ count 2)))
+        (else (fib-iter (+ (* b q) (* a q) (* a p))
+                        (+ (* b p) (* a q))
+                        p
+                        q
+                        (- count 1)))))
+
+(write (fib 7))
+(newline)
+
+(write (fib 8))
+(newline)
+
+(write (fib 9))
+(newline)
+
+(write (fib 12))
 (newline)
