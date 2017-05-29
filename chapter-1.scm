@@ -562,3 +562,23 @@
 ;;   = -0.39980345741334
 ;;
 ;; The runtime and space complexity are O(log3(a)).
+
+
+;; Excercise 1.16
+
+(define (expt b n)
+  (expt-fast-iter b n 1))
+
+(define (expt-fast-iter b n a)
+  (cond ((= n 0) a)
+        ((even? n) (expt-fast-iter (square b) (/ n 2) a))
+        (else (expt-fast-iter b (- n 1) (* a b)))))
+
+(write (expt 2 9))
+(newline)
+
+(write (expt 3 3))
+(newline)
+
+(write (expt 10 6))
+(newline)
