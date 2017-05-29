@@ -657,3 +657,99 @@
 
 (write (fib 12))
 (newline)
+
+
+;; Exercise 1.20
+
+(define (gcd a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+
+(write (gcd 206 40))
+(newline)
+
+;; For applicative-order evaluation, 4 remainder operations
+;; are performed:
+;;
+;;   (gcd 206 40)
+;;   (if (= 40 0) 206 (gcd 40 (remainder 206 40)))
+;;   (gcd 40 (remainder 206 40))
+;;   (gcd 40 6)
+;;   (if (= 6 0) 40 (gcd 6 (remainder 40 6)))
+;;   (gcd 6 (remainder 40 6))
+;;   (gcd 6 4)
+;;   (if (= 4 0) 6 (gcd 4 (remainder 6 4)))
+;;   (gcd 4 (remainder 6 4))
+;;   (gcd 4 2)
+;;   (if (= 2 0) 4 (gcd 2 (remainder 4 2)))
+;;   (gcd 2 (remainder 4 2))
+;;   (gcd 2 0)
+;;   (if (= 0 0) 2 (gcd 0 (remainder 2 0)))
+;;   2
+;;
+;; For normal-order evaluation, 18 remainder operations
+;; are performed:
+;;
+;;   (gcd 206 40)
+;;   (if (= 40 0)
+;;       206
+;;       (gcd 40 (remainder 206 40)))
+;;   (gcd 40 (remainder 206 40))
+;;   (if (= (remainder 206 40) 0)
+;;       40
+;;       (gcd (remainder 206 40) (remainder 40 (remainder 206 40))))
+;;   (if (= 6 0)
+;;       40
+;;       (gcd (remainder 206 40) (remainder 40 (remainder 206 40))))
+;;   (gcd (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;   (if (= (remainder 40 (remainder 206 40)) 0)
+;;       (remainder 206 40)
+;;       (gcd (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))
+;;   (if (= 4 0)
+;;       (remainder 206 40)
+;;       (gcd (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))
+;;   (gcd (remainder 40 (remainder 206 40))
+;;        (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+;;   (if (= (remainder (remainder 206 40) (remainder 40 (remainder 206 40))) 0)
+;;       (remainder 40 (remainder 206 40))
+;;       (gcd (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;            (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))))
+;;   (if (= 2 0)
+;;       (remainder 40 (remainder 206 40))
+;;       (gcd (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;            (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))))
+;;   (gcd (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;        (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))
+;;   (if (= (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))) 0)
+;;       (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;       (gcd (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+;;            (remainder (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;                       (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))))
+;;   (if (= 0 0)
+;;       (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;       (gcd (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40))))
+;;            (remainder (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;                       (remainder (remainder 40 (remainder 206 40)) (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))))))
+;;   (remainder (remainder 206 40) (remainder 40 (remainder 206 40)))
+;;   2
+;;
+;; Interestingly, for the applicative-order case for application `k` of the
+;; `gcd` routine the following number of `remainder` applications are done:
+;;
+;;    #rem(1) = 0
+;;    #rem(k) = #rem(k - 1) + #rem(k - 2) + 1
+;;
+;; Which is, of course, a variant of the Fibonacci sequence!
+;; The number of `remainder` application total would be:
+;;
+;;   (#rem(1) + #rem(2) + ... + #rem(#calls)) + #rem(#calls - 1)
+;;
+;; The example in questions calls `gcd` five times, so:
+;;
+;;   (#rem(1) + #rem(2) + #rem(3) + #rem(4) + #rem(5)) + #rem(4)
+;;   = (0 + 1 + 2 + 4 + 7) + 4
+;;   = 18
+;;
+;; The relation to Fibonacci is consistent with Lame's Theorem given in
+;; the text.
