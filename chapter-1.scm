@@ -460,3 +460,73 @@
 ;;          = ((phi^(n-1) - psi^(n-1)) + (phi^(n-2) - psi^(n-2))) / sqrt(5)
 ;;          = ((phi^(n-1) + phi^(n-2)) - (psi^(n-1) + psi^(n-2))) / sqrt(5)
 ;;          = (phi^n - psi^n) / sqrt(5)
+
+(define (count-change amount)
+  (cc amount 5))
+
+(define (cc amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+ (cc amount
+                     (- kinds-of-coins 1))
+                 (cc (- amount
+                        (first-denomination kinds-of-coins))
+                     kinds-of-coins)))))
+
+(define (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+
+(write (count-change 11))
+(newline)
+
+;; Exercise 1.14
+
+;; The call tree for `(count-change 11) looks like:
+;;
+;; (cc 11 5)                                = 4
+;;   (cc 11 4)                              = 4
+;;     (cc 11 3)                            = 4
+;;       (cc 11 2)                          = 3
+;;         (cc 11 1)                        = 2
+;;           (cc 11 0)                      = 0
+;;           (cc 10 1)                      = 1
+;;             (cc 10 0)                    = 0
+;;             (cc  9 1)                    = 1
+;;               (cc 9 0)                   = 0
+;;               (cc 8 1)                   = 1
+;;                 (cc 7 0)                 = 0
+;;                 (cc 6 1)                 = 1
+;;                   (cc 5 0)               = 0
+;;                   (cc 4 1)               = 1
+;;                     (cc 4 0)             = 0
+;;                     (cc 3 1)             = 1
+;;                       (cc 3 0)           = 0
+;;                       (cc 2 1)           = 1
+;;                         (cc 2 0)         = 0
+;;                         (cc 1 1)         = 1
+;;                           (cc 1 0)       = 0
+;;                           (cc 0 1)       = 1
+;;         (cc 6 2)                         = 1
+;;           (cc 6 1)                       = 0
+;;             (cc 6 0)                     = 0
+;;           (cc 1 2)                       = 1
+;;             (cc 1 1)                     = 0
+;;               (cc 1 0)                   = 0
+;;             (cc 0 1)                     = 1
+;;       (cc 1 3)                           = 1
+;;         (cc 1 2)                         = 1
+;;           (cc 1 1)                       = 1
+;;             (cc 1 0)                     = 0
+;;             (cc 0 1)                     = 1
+;;           (cc -4 2)                      = 0
+;;         (cc -9 3)                        = 0
+;;     (cc -14 4)                           = 0
+;;   (cc -38 5)                             = 0
+;;
+;; As the amount of change, `ac`, increases the space
+;; complexity is O(ac).  The runtime complexity is
+;; exponential, O(c^ac), for some constant `c`.
