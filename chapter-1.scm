@@ -809,8 +809,9 @@
       (find a b)
       (find (+ a 1) b)))
 
-(define start 1000000)
-(search-for-primes start (+ start 100))
+(timed-prime-test 1009)
+(timed-prime-test 1013)
+(timed-prime-test 1019)
 (newline)
 
 ;; Three largest primes greater than 1000:
@@ -821,6 +822,11 @@
 ;;
 ;;   AverageTime(1000) = 0.0009765625
 
+(timed-prime-test 10007)
+(timed-prime-test 10009)
+(timed-prime-test 10037)
+(newline)
+
 ;; Three largest primes greater than 10000:
 ;;
 ;;   10007 *** 0.003173828125
@@ -830,6 +836,11 @@
 ;;   AverageTime(10000) = 0.0030110677083333335
 ;;   sqrt(10) * AverageTime(1000) = 0.003088161777508183
 
+(timed-prime-test 100003)
+(timed-prime-test 100019)
+(timed-prime-test 100043)
+(newline)
+
 ;; Three largest primes greater than 100000:
 ;;
 ;;   100003 *** 0.010009765625
@@ -838,6 +849,11 @@
 ;;
 ;;   Average time = 0.012613932291666666
 ;;   sqrt(10) * AverageTime(10000) = 0.0095218321473169
+
+(timed-prime-test 1000003)
+(timed-prime-test 1000033)
+(timed-prime-test 1000037)
+(newline)
 
 ;; Three largest primes greater than 100000:
 ;;
@@ -850,3 +866,73 @@
 
 ;; These timing results do, indeed, correspond well with the
 ;; computational complexity bounds.
+
+
+;; Exercise 1.23
+
+(define (find-divisor n test-divisor)
+  (define (next x)
+    (if (= x 2)
+        3
+        (+ x 2)))
+
+  (cond ((> (square test-divisor) n) n)
+        ((divides? test-divisor n) test-divisor)
+        (else (find-divisor n (next test-divisor)))))
+
+(timed-prime-test 1009)
+(timed-prime-test 1013)
+(timed-prime-test 1019)
+(newline)
+
+;; Three largest primes greater than 1000:
+;;
+;;   1009 *** 0.04296875
+;;   1013 *** 0.002197265625
+;;   1019 *** 0.0009765625
+;;
+;;   AverageTime(1000) = 0.015380859375
+
+(timed-prime-test 10007)
+(timed-prime-test 10009)
+(timed-prime-test 10037)
+(newline)
+
+;; Three largest primes greater than 10000:
+;;
+;;   10007 *** 0.003173828125
+;;   10009 *** 0.0029296875
+;;   10037 *** 0.003173828125
+;;
+;;   AverageTime(10000) = 0.0030924479166666665
+
+(timed-prime-test 100003)
+(timed-prime-test 100019)
+(timed-prime-test 100043)
+(newline)
+
+;; Three largest primes greater than 100000:
+;;
+;;   100003 *** 0.01416015625
+;;   100019 *** 0.008056640625
+;;   100043 *** 0.009033203125
+;;
+;;   Average time = 0.010416666666666666
+
+(timed-prime-test 1000003)
+(timed-prime-test 1000033)
+(timed-prime-test 1000037)
+(newline)
+
+;; Three largest primes greater than 100000:
+;;
+;;   1000003 *** 0.02001953125
+;;   1000033 *** 0.014892578125
+;;   1000037 *** 0.01806640625
+;;
+;;   Average time = 0.017659505208333332
+
+;; The factor gain does *not* match up by 2.
+;; The reason seems to be that a branch has
+;; been introduced into the critical path for
+;; computing the "next" number to test.
