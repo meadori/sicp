@@ -783,3 +783,70 @@
 (write (smallest-divisor 19999))
 (newline)
 ;; 7
+
+
+;; Exercise 1.22
+
+(define (timed-prime-test n)
+  (newline)
+  (display n)
+  (start-prime-test n (current-inexact-milliseconds)))
+
+(define (start-prime-test n start-time)
+  (when (prime? n)
+      (report-prime (- (current-inexact-milliseconds) start-time))))
+
+(define (report-prime elapsed-time)
+  (display " *** ")
+  (display elapsed-time))
+
+(define (search-for-primes a b)
+  (define (find a b)
+    (when (< a b)
+      (timed-prime-test a)
+      (search-for-primes (+ a 2) b)))
+  (if (odd? a)
+      (find a b)
+      (find (+ a 1) b)))
+
+(define start 1000000)
+(search-for-primes start (+ start 100))
+(newline)
+
+;; Three largest primes greater than 1000:
+;;
+;;   1009 *** 0.0009765625
+;;   1013 *** 0.0009765625
+;;   1019 *** 0.0009765625
+;;
+;;   AverageTime(1000) = 0.0009765625
+
+;; Three largest primes greater than 10000:
+;;
+;;   10007 *** 0.003173828125
+;;   10009 *** 0.0029296875
+;;   10037 *** 0.0029296875
+;;
+;;   AverageTime(10000) = 0.0030110677083333335
+;;   sqrt(10) * AverageTime(1000) = 0.003088161777508183
+
+;; Three largest primes greater than 100000:
+;;
+;;   100003 *** 0.010009765625
+;;   100019 *** 0.013916015625
+;;   100043 *** 0.013916015625
+;;
+;;   Average time = 0.012613932291666666
+;;   sqrt(10) * AverageTime(10000) = 0.0095218321473169
+
+;; Three largest primes greater than 100000:
+;;
+;;   1000003 *** 0.028076171875
+;;   1000033 *** 0.034912109375
+;;   1000037 *** 0.049072265625
+;;
+;;   Average time = 0.037353515625
+;;   sqrt(10) * AverageTime(100000) = 0.03988875629281403
+
+;; These timing results do, indeed, correspond well with the
+;; computational complexity bounds.
