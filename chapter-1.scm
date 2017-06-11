@@ -936,3 +936,84 @@
 ;; The reason seems to be that a branch has
 ;; been introduced into the critical path for
 ;; computing the "next" number to test.
+
+
+;; Exercise 1.24
+
+(define (expmod base exp m)
+  (cond ((= exp 0) 1)
+        ((even? exp)
+         (remainder (square (expmod base (/ exp 2) m))
+                    m))
+        (else
+         (remainder (* base (expmod base (- exp 1) m))
+                    m))))
+
+(define (fermat-test n)
+  (define (try-it a)
+    (= (expmod a n n) a))
+  (try-it (+ 1 (random (- n 1)))))
+
+(define (fast-prime? n times)
+  (cond ((= times 0) true)
+        ((fermat-test n) (fast-prime? n (- times 1)))
+        (else false)))
+
+(define (start-prime-test n start-time)
+  (when (fast-prime? n 100)
+      (report-prime (- (current-inexact-milliseconds) start-time))))
+
+(timed-prime-test 1009)
+(timed-prime-test 1013)
+(timed-prime-test 1019)
+(newline)
+
+;; Three largest primes greater than 1000:
+;;
+;;   1009 *** 0.18115234375
+;;   1013 *** 0.06103515625
+;;   1019 *** 0.10400390625
+;;
+;;   AverageTime(1000) = 0.11539713541666667
+
+(timed-prime-test 10007)
+(timed-prime-test 10009)
+(timed-prime-test 10037)
+(newline)
+
+;; Three largest primes greater than 10000:
+;;
+;;   10007 *** 0.099853515625
+;;   10009 *** 0.107177734375
+;;   10037 *** 0.113037109375
+;;
+;;   AverageTime(10000) = 0.106689453125
+;;   log2(10) * AverageTime(1000) = 0.3833409862101465
+
+(timed-prime-test 100003)
+(timed-prime-test 100019)
+(timed-prime-test 100043)
+(newline)
+
+;; Three largest primes greater than 100000:
+;;
+;;   100003 *** 0.119140625
+;;   100019 *** 0.123046875
+;;   100043 *** 0.0908203125
+;;
+;;   Average time = 0.11100260416666667
+;;   log2(10) * AverageTime(10000) = 0.35441469176410584
+
+(timed-prime-test 1000003)
+(timed-prime-test 1000033)
+(timed-prime-test 1000037)
+(newline)
+
+;; Three largest primes greater than 100000:
+;;
+;;   1000003 *** 0.11279296875
+;;   1000033 *** 0.1337890625
+;;   1000037 *** 0.115966796875
+;;
+;;   Average time = 0.120849609375
+;;   log2(10) * AverageTime(100000) = 0.368742669386911
