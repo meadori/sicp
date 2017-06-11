@@ -960,7 +960,7 @@
         (else false)))
 
 (define (start-prime-test n start-time)
-  (when (fast-prime? n 100)
+  (when (fast-prime? n 5)
       (report-prime (- (current-inexact-milliseconds) start-time))))
 
 (timed-prime-test 1009)
@@ -970,11 +970,11 @@
 
 ;; Three largest primes greater than 1000:
 ;;
-;;   1009 *** 0.18115234375
-;;   1013 *** 0.06103515625
-;;   1019 *** 0.10400390625
+;;   1009 *** 0.116943359375
+;;   1013 *** 0.006103515625
+;;   1019 *** 0.00390625
 ;;
-;;   AverageTime(1000) = 0.11539713541666667
+;;   AverageTime(1000) = 0.042317708333333336
 
 (timed-prime-test 10007)
 (timed-prime-test 10009)
@@ -983,12 +983,12 @@
 
 ;; Three largest primes greater than 10000:
 ;;
-;;   10007 *** 0.099853515625
-;;   10009 *** 0.107177734375
-;;   10037 *** 0.113037109375
-;;
-;;   AverageTime(10000) = 0.106689453125
-;;   log2(10) * AverageTime(1000) = 0.3833409862101465
+;;   10007 *** 0.007080078125
+;;   10009 *** 0.005126953125
+;;   10037 *** 0.007080078125
+;;  
+;;   AverageTime(10000) = 0.006429036458333333
+;;   (log2(10) / log2(1000) + 1) * AverageTime(1000) = 0.05642361111111112
 
 (timed-prime-test 100003)
 (timed-prime-test 100019)
@@ -997,12 +997,12 @@
 
 ;; Three largest primes greater than 100000:
 ;;
-;;   100003 *** 0.119140625
-;;   100019 *** 0.123046875
-;;   100043 *** 0.0908203125
-;;
-;;   Average time = 0.11100260416666667
-;;   log2(10) * AverageTime(10000) = 0.35441469176410584
+;;   100003 *** 0.008056640625
+;;   100019 *** 0.0068359375
+;;   100043 *** 0.008056640625
+;; 
+;;   AverageTime(100000) = 0.006429036458333333
+;;   (log2(10) / log2(10000) + 1) * AverageTime(10000) = 0.008036295572916666
 
 (timed-prime-test 1000003)
 (timed-prime-test 1000033)
@@ -1011,9 +1011,12 @@
 
 ;; Three largest primes greater than 100000:
 ;;
-;;   1000003 *** 0.11279296875
-;;   1000033 *** 0.1337890625
-;;   1000037 *** 0.115966796875
+;;   1000003 *** 0.008056640625
+;;   1000033 *** 0.008056640625
+;;   1000037 *** 0.008056640625
 ;;
-;;   Average time = 0.120849609375
-;;   log2(10) * AverageTime(100000) = 0.368742669386911
+;;   AverageTime(1000000) = 0.006429036458333333
+;;   (log2(10) / log2(100000) + 1) * AverageTime(100000) = 0.0077148437499999995
+
+;; These timing results do, indeed, correspond well with the
+;; computational complexity bounds.
